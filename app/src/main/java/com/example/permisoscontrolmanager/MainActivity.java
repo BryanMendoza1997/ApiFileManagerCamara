@@ -24,6 +24,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     private ImageView imagen;
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    String patch="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,25 +90,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
-    public void BajarDoc(View view){
-
-        String url = "https://www.uteq.edu.ec/revistacyt/archivositio/instrucciones_arbitros.pdf";
-        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-        request.setDescription(" Download PDF");
-        request.setTitle("Pdf arbitros");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            request.allowScanningByMediaScanner();
-            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        }
-        request.setDestinationInExternalFilesDir(this,Environment.DIRECTORY_DOWNLOADS, "filedownload.pdf");
-        DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-        try {
-            manager.enqueue(request);
-        } catch (Exception e) {
-            Toast.makeText(this.getApplicationContext(),"Error: "  + e.getMessage(),Toast.LENGTH_LONG).show();
-        }
-
-    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -117,17 +99,33 @@ public class MainActivity extends AppCompatActivity {
             imagen.setImageBitmap(imageBitmap);
         }
         if (requestCode == 10 && resultCode == RESULT_OK) {
-           String patch= data.getData().getPath();
-           //String directorioRaiz = Environment.getExternalStorageDirectory().getPath();
+
+           patch= data.getData().getPath();
+
             Toast.makeText(this, patch ,Toast.LENGTH_LONG).show();
-            //Toast.makeText(this, directorioRaiz ,Toast.LENGTH_LONG).show();
+
+            String url = "http://biblioteca.clacso.edu.ar/ar/libros/clacso/crop/glosario/03oyen.pdf";
+            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+            request.setDescription(" Download glosario");
+            request.setTitle("Pdf glosario");
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                request.allowScanningByMediaScanner();
+                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+            }
+            request.setDestinationInExternalPublicDir(patch, "glosario.pdf");
+            DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+            try {
+                manager.enqueue(request);
+            } catch (Exception e) {
+                Toast.makeText(this.getApplicationContext(),"Error: "  + e.getMessage(),Toast.LENGTH_LONG).show();
+            }
+
         }
     }
     public  void abrirexplorador(View view){
-        Intent my_file=new Intent(Intent.ACTION_GET_CONTENT);
-        my_file.setType("*/*");
-        startActivityForResult(my_file,10);
-
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+        startActivityForResult(intent, 10);
     }
 
 }
