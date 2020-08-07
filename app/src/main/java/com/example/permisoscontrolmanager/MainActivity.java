@@ -90,15 +90,16 @@ public class MainActivity extends AppCompatActivity {
 
     }
     public void BajarDoc(View view){
+
         String url = "https://www.uteq.edu.ec/revistacyt/archivositio/instrucciones_arbitros.pdf";
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-        request.setDescription("PDF");
-        request.setTitle("Pdf");
+        request.setDescription(" Download PDF");
+        request.setTitle("Pdf arbitros");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             request.allowScanningByMediaScanner();
             request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
         }
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "filedownload.pdf");
+        request.setDestinationInExternalFilesDir(this,Environment.DIRECTORY_DOWNLOADS, "filedownload.pdf");
         DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
         try {
             manager.enqueue(request);
@@ -115,6 +116,16 @@ public class MainActivity extends AppCompatActivity {
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             imagen.setImageBitmap(imageBitmap);
         }
+        if (requestCode == 10 && resultCode == RESULT_OK) {
+           String patch= data.getData().getPath();
+           Toast.makeText(this, patch,Toast.LENGTH_LONG).show();
+        }
+    }
+    public  void abrirexplorador(View view){
+        Intent my_file=new Intent(Intent.ACTION_GET_CONTENT);
+        my_file.setType("*/*");
+        startActivityForResult(my_file,10);
+
     }
 
 }
