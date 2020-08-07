@@ -118,7 +118,9 @@ public class MainActivity extends AppCompatActivity {
         }
         if (requestCode == 10 && resultCode == RESULT_OK) {
            String patch= data.getData().getPath();
-           Toast.makeText(this, patch,Toast.LENGTH_LONG).show();
+           //String directorioRaiz = Environment.getExternalStorageDirectory().getPath();
+            Toast.makeText(this, patch ,Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, directorioRaiz ,Toast.LENGTH_LONG).show();
         }
     }
     public  void abrirexplorador(View view){
